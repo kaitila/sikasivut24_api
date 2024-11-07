@@ -13,3 +13,4 @@
   "exclude": ["node_modules"]
 }
 // npx supabase gen types --lang=typescript --project-id "zzfzjdrkfgzzdabfpuan" --schema public > database.types.ts
+// fly launch
