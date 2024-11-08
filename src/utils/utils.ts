@@ -7,11 +7,11 @@ import {
   POINTS_RATE,
   TICKET_ODDS,
 } from "./const";
-import { GameStateData } from "../types";
+import { GameValidationType } from "../types";
 import random from "./random";
 
 export const checkDelta = (timestamp: number) => {
-  return Date.now() - timestamp < 500;
+  return Date.now() - timestamp < 2000;
 };
 
 export const isAtTicketThreshold = (score: number) => {
@@ -48,50 +48,21 @@ export const validateTimeSpent = (score: number, duration: number) => {
   return true;
 };
 
-export const validatePlatformChecks = (
+export const validateGameData = (
   uuid: string,
-  state: GameStateData[]
+  gameData: GameValidationType
 ) => {
   const rand = random(uuid);
-  const index = Math.floor(rand() * 100);
-  if (state.length !== 3) {
+  const startIndex = Math.floor(rand() * 100);
+  const arrLength = Math.floor(rand() * 10);
+
+  if (gameData.length != arrLength) {
     return false;
   }
 
-  if (index > state[0].id || index + 2 < state[0].id) {
-    return false;
+  for (let i = 0; i < startIndex; i++) {
+    rand();
   }
 
-  return (
-    validateTimeBetweenJumps(state[1], state[0]) &&
-    validateTimeBetweenJumps(state[2], state[1])
-  );
+  return gameData.every((val) => val == rand());
 };
-
-const validateTimeBetweenJumps = (
-  state1: GameStateData,
-  state2: GameStateData
-) => {
-  const deltaID = state1.id - state2.id;
-  const deltaTS = state1.ts - state2.ts;
-  switch (deltaID) {
-    case 2:
-      return deltaTS >= jumpDurations[2][0] && deltaTS <= jumpDurations[2][1];
-    case 1:
-      return deltaTS >= jumpDurations[1][0] && deltaTS <= jumpDurations[1][1];
-    case 0:
-      return deltaTS >= jumpDurations[0][0] && deltaTS <= jumpDurations[0][1];
-    case -1:
-      return deltaTS >= jumpDurations[-1][0] && deltaTS <= jumpDurations[-1][1];
-    case -2:
-      return deltaTS >= jumpDurations[-2][0] && deltaTS <= jumpDurations[-2][1];
-    case -3:
-      return deltaTS >= jumpDurations[-3][0] && deltaTS <= jumpDurations[-3][1];
-    case -4:
-      return deltaTS >= jumpDurations[-4][0] && deltaTS <= jumpDurations[-4][1];
-  }
-
-  return false;
-};
-
-//rand => index, (i, i + 1, i + 2)

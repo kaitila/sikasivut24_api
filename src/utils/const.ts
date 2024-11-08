@@ -13,7 +13,7 @@ export const jumpDurations = {
 
 export const POINTS_RATE = 100000;
 export const MIN_POINTS_THRESHOLD = 1000;
-export const TICKET_ODDS = 1;
+export const TICKET_ODDS = 0;
 export const DAILY_TICKET_LIMIT = 3;
 export const SENDER_EMAIL = "MS_TKEasB@trial-z3m5jgr2kjdldpyo.mlsender.net";
 export const EMAIL_SUBJECT = "Drinkkilippu";

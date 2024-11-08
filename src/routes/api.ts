@@ -10,6 +10,7 @@ import {
   checkDelta,
   isAtTicketThreshold,
   isTicketWin,
+  validateGameData,
   validateTimeSpent,
 } from "../utils/utils";
 import bodyParser from "body-parser";
@@ -22,15 +23,16 @@ const jsonParser = bodyParser.json();
 
 apiRouter.post("/start-game", jsonParser, async (req, res) => {
   const body = parseBody(req.body, startGameSchema);
+
   if (!body) {
     res.json({ error: "Invalid request body" });
     return;
   }
 
-  const { telegram, email, timestamp } = body;
+  const { telegram, timestamp } = body;
 
   if (!telegram) {
-    res.json({ data: { id: crypto.randomUUID(), anon: true } });
+    res.json({ data: { anon: true } });
     return;
   }
 
@@ -48,7 +50,6 @@ apiRouter.post("/start-game", jsonParser, async (req, res) => {
   const id = crypto.randomUUID();
   const { error } = await supabase.from("games").insert({
     id,
-    email,
     telegram,
     started_at: timestamp,
   });
@@ -64,6 +65,7 @@ apiRouter.post("/start-game", jsonParser, async (req, res) => {
 });
 
 apiRouter.post("/end-game", jsonParser, async (req, res) => {
+  console.log(req.body);
   const body = parseBody(req.body, endGameSchema);
 
   if (!body) {
@@ -71,7 +73,7 @@ apiRouter.post("/end-game", jsonParser, async (req, res) => {
     return;
   }
 
-  const { gameId, score, timestamp } = body;
+  const { gameId, score, timestamp, state } = body;
 
   if (!checkDelta(timestamp)) {
     res.json({ error: "Invalid timestamp" });
@@ -84,10 +86,13 @@ apiRouter.post("/end-game", jsonParser, async (req, res) => {
     return;
   }
 
-  const { email, started_at } = data;
+  const { started_at } = data;
 
   const duration = timestamp - started_at;
-  if (!validateTimeSpent(score, duration)) {
+  if (
+    !validateTimeSpent(score, duration) ||
+    (isAtTicketThreshold(score) && !validateGameData(gameId, state))
+  ) {
     await deleteGameWithId(gameId);
     res.json({ error: "Invalid score" });
     return;
@@ -104,10 +109,8 @@ apiRouter.post("/end-game", jsonParser, async (req, res) => {
       console.log("Created ticket with id: " + ticketId);
     }
 
-    if (!error && email) {
+    if (!error) {
       drinkTicketId = ticketId;
-      await sendDrinkTicketEmail({ recipent: email, uuid: ticketId });
-      console.log("Sent drink ticket via email");
     }
   } else {
     console.log("No win");

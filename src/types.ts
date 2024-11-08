@@ -21,7 +21,4 @@ export interface GameDataParsed {
   telegram: string;
 }
 
-export interface GameStateData {
-  id: number;
-  ts: number;
-}
+export type GameValidationType = number[];

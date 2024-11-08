@@ -1,5 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
-import { Database } from "../../database.types";
+import { Database } from "../database.types";
 import "dotenv/config";
 import { GameDataParsed } from "../types";
 
@@ -28,7 +28,7 @@ export const getGameDataWithId = async (gameId: string) => {
     .limit(1)
     .single();
 
-  if (!data || !data.email || !data.telegram || !data.started_at) {
+  if (!data || !data.telegram || !data.started_at) {
     return undefined;
   }
 

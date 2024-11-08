@@ -4,9 +4,9 @@ import compression from "compression";
 import helmet from "helmet";
 import RateLimit from "express-rate-limit";
 import "dotenv/config";
-import { apiRouter } from "./src/routes/api";
-import { getCurrentDay } from "./src/utils/utils";
-import { checkForIp } from "./src/middleware";
+import { apiRouter } from "./routes/api";
+import { getCurrentDay } from "./utils/utils";
+import { checkForIp } from "./middleware";
 
 const app = express();
 const port = process.env.PORT || 8080;
@@ -29,6 +29,13 @@ app.use(
     },
   })
 );
+
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  next();
+});
 
 app.use(express.static(path.join(__dirname, "../public")));
 app.use("/api", checkForIp, apiRouter);
