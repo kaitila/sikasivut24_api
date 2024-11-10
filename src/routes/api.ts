@@ -35,10 +35,10 @@ apiRouter.post("/start-game", jsonParser, async (req, res) => {
 
   const { telegram, timestamp } = body;
 
-  if (!checkDelta(timestamp)) {
-    res.json({ error: "Invalid timestamp" });
-    return;
-  }
+  // if (!checkDelta(timestamp)) {
+  //   res.json({ error: "Invalid timestamp" });
+  //   return;
+  // }
 
   const nickname = body.nickname || "nimetön";
 
