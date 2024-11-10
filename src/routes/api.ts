@@ -21,7 +21,6 @@ import {
   startGameSchema,
   verifyDrinkTicketSchema,
 } from "../utils/schemas";
-import { sendDrinkTicketEmail } from "../utils/mailerSend";
 
 export const apiRouter = Router();
 const jsonParser = bodyParser.json();
@@ -36,13 +35,15 @@ apiRouter.post("/start-game", jsonParser, async (req, res) => {
 
   const { telegram, timestamp } = body;
 
-  if (!telegram) {
-    res.json({ data: { anon: true } });
+  if (!checkDelta(timestamp)) {
+    res.json({ error: "Invalid timestamp" });
     return;
   }
 
-  if (!checkDelta(timestamp)) {
-    res.json({ error: "Invalid timestamp" });
+  const nickname = body.nickname || "nimetön";
+
+  if (!telegram) {
+    res.json({ data: { anon: true } });
     return;
   }
 
@@ -56,6 +57,7 @@ apiRouter.post("/start-game", jsonParser, async (req, res) => {
   const { error } = await supabase.from("games").insert({
     id,
     telegram,
+    nickname,
     started_at: timestamp,
   });
 
@@ -146,7 +148,7 @@ apiRouter.get("/highscores", async (req, res) => {
     .select("*")
     .not("score", "is", null)
     .order("score", { ascending: false })
-    .limit(10);
+    .limit(5);
 
   if (error) {
     res.json({ error: "Error fetching highscores" });

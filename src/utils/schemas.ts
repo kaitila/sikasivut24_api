@@ -1,7 +1,8 @@
 import * as z from "zod";
 
 export const startGameSchema = z.object({
-  telegram: z.string(),
+  telegram: z.string().max(32),
+  nickname: z.string().max(32),
   timestamp: z.coerce.number(),
 });
 
