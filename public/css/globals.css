@@ -1,0 +1,204 @@
+@import url("https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&display=swap");
+
+:root {
+  --h1-size: 3rem;
+  --h2-size: 2.25rem;
+  --h3-size: 1.75rem;
+  --h4-size: 1.25rem;
+  --p-size: 1rem;
+  --sub-p-size: 0.75rem;
+
+  --black: #232323;
+  --white: 225, 225, 225;
+  --red: 229, 118, 118;
+  --light-green: #3f9769;
+  --light-green-rgb: 63, 151, 105;
+  --green: #177245;
+  --dark-green: #125433;
+  --blue: 89, 159, 217;
+
+  --gold: #ffd700;
+  --gold-rgb: 255, 215, 0;
+  --silver: #c0c0c0;
+  --silver-rgb: 192, 192, 192;
+  --bronze: #cd7f32;
+  --bronze-rgb: 205, 127, 50;
+
+  --navbar-background: rgb(229, 118, 118);
+  --navbar-gradient: linear-gradient(
+    17deg,
+    rgba(229, 118, 118, 1) 0%,
+    rgba(23, 114, 69, 1) 31%,
+    rgba(35, 35, 35, 1) 85%
+  );
+  --border-gradient: linear-gradient(
+    330deg,
+    rgba(23, 114, 69, 1) 20%,
+    rgba(18, 84, 51, 1) 50%
+  );
+  --border-gradient-2: linear-gradient(
+    180deg,
+    rgba(23, 114, 69, 1) 2%,
+    rgba(18, 84, 51, 1) 70%
+  );
+  --border-gradient-3: linear-gradient(
+    330deg,
+    var(--green) 20%,
+    var(--black) 40%
+  );
+
+  --border-gradient-4: linear-gradient(
+    180deg,
+    var(--green) 20%,
+    var(--black) 70%
+  );
+
+  --cover-gradient: linear-gradient(rgba(35, 35, 35, 0) 0%, var(--black) 80%);
+  --loading-bar-gradient: linear-gradient(
+    270deg,
+    rgb(var(--red)) 0%,
+    var(--black) 100%
+  );
+}
+
+@media only screen and (min-width: 640px) {
+  :root {
+    --h1-size: 4rem;
+    --h2-size: 3rem;
+    --h3-size: 2rem;
+    --h4-size: 1.25rem;
+    --p-size: 1rem;
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  :root {
+    --h1-size: 5rem;
+    --h2-size: 3.5rem;
+    --h3-size: 2.25rem;
+    --h4-size: 1.5rem;
+    --p-size: 1.25rem;
+    --sub-p-size: 1rem;
+    --cover-gradient: linear-gradient(rgba(35, 35, 35, 0) 0%, var(--black) 60%);
+  }
+}
+
+@media only screen and (min-width: 1600px) {
+  :root {
+    --h1-size: 6rem;
+    --h2-size: 4.25rem;
+    --h3-size: 3rem;
+    --h4-size: 2rem;
+    --p-size: 1.5rem;
+    --sub-p-size: 1.25rem;
+  }
+}
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+a,
+button {
+  text-decoration: none;
+  color: var(--white);
+  font-size: var(--p-size);
+}
+
+button {
+  background-color: transparent;
+  outline: none;
+}
+
+button:hover {
+  cursor: pointer;
+}
+
+a:hover {
+  color: var(--white);
+}
+
+body {
+  background-color: var(--black);
+  color: rgb(var(--white));
+}
+
+header {
+  overflow: hidden;
+}
+
+h1 {
+  font-size: var(--h1-size);
+  font-weight: 600;
+}
+
+h4 {
+  font-size: var(--h4-size);
+  font-weight: 500;
+}
+
+h2 {
+  font-size: var(--h2-size);
+}
+
+h3 {
+  font-size: var(--h3-size);
+}
+
+p {
+  font-size: var(--p-size);
+}
+
+.rubik {
+  font-family: "Rubik", system-ui !important;
+  font-optical-sizing: auto;
+  font-style: normal;
+}
+
+.caveat {
+  font-family: "Caveat", cursive;
+  font-optical-sizing: auto;
+  font-style: normal;
+}
+
+.glow-white {
+  text-shadow: 0px 0px 20px rgba(var(--white), 0.3);
+}
+
+.red {
+  color: rgb(var(--red));
+  text-shadow: 0px 0px 20px rgba(var(--red), 0.3);
+}
+
+.blue {
+  color: rgb(var(--blue));
+  text-shadow: 0px 0px 20px rgba(var(--blue), 0.3);
+}
+
+.light-green {
+  color: var(--light-green);
+  text-shadow: 0px 0px 20px rgba(var(--light-green-rgb), 0.3);
+}
+
+.gold {
+  color: var(--gold);
+  text-shadow: 0px 0px 20px rgba(var(--gold-rgb), 0.3);
+}
+
+.silver {
+  color: var(--silver);
+  text-shadow: 0px 0px 20px rgba(var(--silver-rgb), 0.3);
+}
+
+.bronze {
+  color: var(--bronze);
+  text-shadow: 0px 0px 20px rgba(var(--bronze-rgb), 0.3);
+}

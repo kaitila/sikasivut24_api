@@ -26,6 +26,7 @@ app.use(
   helmet.contentSecurityPolicy({
     directives: {
       "script-src": ["'self'", "code.jquery.com", "cdn.jsdelivr.net"],
+      "img-src": ["'self'", "api.qrserver.com/"],
     },
   })
 );
@@ -40,20 +41,12 @@ app.use((req, res, next) => {
 app.use(express.static(path.join(__dirname, "../public")));
 app.use("/api", checkForIp, apiRouter);
 
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "../views/index.html"));
-});
-
-app.get("/theme", (req, res) => {
-  res.sendFile(path.join(__dirname, "../views/theme.html"));
-});
-
-app.get("/2", (req, res) => {
-  res.sendFile(path.join(__dirname, "../views/index2.html"));
-});
-
 app.get("/test", (req, res) => {
   res.sendFile(path.join(__dirname, "../views/test.html"));
+});
+
+app.get("/drink-ticket", (req, res) => {
+  res.sendFile(path.join(__dirname, "../views/drink-ticket.html"));
 });
 
 app.listen(port, () => {

@@ -34,3 +34,13 @@ export const getGameDataWithId = async (gameId: string) => {
 
   return data as GameDataParsed;
 };
+
+export const getDrinkTicket = async (gameId: string) => {
+  const { data, error } = await supabase
+    .from("drink_tickets")
+    .select("*")
+    .eq("id", gameId)
+    .limit(1)
+    .single();
+  return data;
+};

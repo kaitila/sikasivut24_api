@@ -2,6 +2,7 @@ import { Router } from "express";
 import {
   createDrinkTicket,
   deleteGameWithId,
+  getDrinkTicket,
   getGameDataWithId,
   supabase,
 } from "../utils/supabase";
@@ -15,7 +16,11 @@ import {
 } from "../utils/utils";
 import bodyParser from "body-parser";
 import { parseBody } from "../utils/body";
-import { endGameSchema, startGameSchema } from "../utils/schemas";
+import {
+  endGameSchema,
+  startGameSchema,
+  verifyDrinkTicketSchema,
+} from "../utils/schemas";
 import { sendDrinkTicketEmail } from "../utils/mailerSend";
 
 export const apiRouter = Router();
@@ -65,7 +70,6 @@ apiRouter.post("/start-game", jsonParser, async (req, res) => {
 });
 
 apiRouter.post("/end-game", jsonParser, async (req, res) => {
-  console.log(req.body);
   const body = parseBody(req.body, endGameSchema);
 
   if (!body) {
@@ -86,7 +90,12 @@ apiRouter.post("/end-game", jsonParser, async (req, res) => {
     return;
   }
 
-  const { started_at } = data;
+  const { started_at, ended_at } = data;
+
+  if (ended_at) {
+    res.json({ error: "Invalid score" });
+    return;
+  }
 
   const duration = timestamp - started_at;
   if (
@@ -109,7 +118,7 @@ apiRouter.post("/end-game", jsonParser, async (req, res) => {
       console.log("Created ticket with id: " + ticketId);
     }
 
-    if (!error) {
+    if (!error && ticketId) {
       drinkTicketId = ticketId;
     }
   } else {
@@ -145,4 +154,21 @@ apiRouter.get("/highscores", async (req, res) => {
   }
 
   res.json({ data: { highscores: data } });
+});
+
+apiRouter.post("/verify-ticket", jsonParser, async (req, res) => {
+  const body = parseBody(req.body, verifyDrinkTicketSchema);
+  if (!body) {
+    res.json({ error: "Invalid request body" });
+    return;
+  }
+  const { gameId } = body;
+
+  if (await getDrinkTicket(gameId)) {
+    res.json({ status: "OK" });
+    return;
+  } else {
+    res.json({ error: "Invalid ticket id" });
+    return;
+  }
 });

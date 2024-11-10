@@ -15,6 +15,9 @@ export const checkDelta = (timestamp: number) => {
 };
 
 export const isAtTicketThreshold = (score: number) => {
+  console.log(
+    "Ticket threshold: " + MIN_POINTS_THRESHOLD + ". Submitted score: " + score
+  );
   return score >= MIN_POINTS_THRESHOLD;
 };
 

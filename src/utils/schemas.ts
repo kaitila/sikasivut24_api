@@ -11,3 +11,7 @@ export const endGameSchema = z.object({
   timestamp: z.coerce.number(),
   state: z.coerce.number().array(),
 });
+
+export const verifyDrinkTicketSchema = z.object({
+  gameId: z.string(),
+});
