@@ -1,4 +1,4 @@
-export const POINTS_RATE = 100000;
+export const POINTS_RATE = 50;
 export const MIN_POINTS_THRESHOLD = 4000;
 export const TICKET_ODDS = 0.03;
 export const DAILY_TICKET_LIMIT = 3;

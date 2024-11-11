@@ -7,6 +7,7 @@ import "dotenv/config";
 import { apiRouter } from "./routes/api";
 import { getCurrentDay } from "./utils/utils";
 import { checkForIp } from "./middleware";
+import cors from "cors";
 
 const app = express();
 const port = process.env.PORT || 8080;
@@ -21,6 +22,8 @@ const limiter = RateLimit({
 });
 // Apply rate limiter to all requests
 app.use(limiter);
+
+app.use(cors({ origin: ["http://127.0.0.1:5500", "https://sikajuhlat.com"] }));
 
 app.use(
   helmet.contentSecurityPolicy({
