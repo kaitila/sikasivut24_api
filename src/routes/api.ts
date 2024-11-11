@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+  checkIfBanned,
   createDrinkTicket,
   deleteGameWithId,
   getDrinkTicket,
@@ -35,10 +36,10 @@ apiRouter.post("/start-game", jsonParser, async (req, res) => {
 
   const { telegram, timestamp } = body;
 
-  // if (!checkDelta(timestamp)) {
-  //   res.json({ error: "Invalid timestamp" });
-  //   return;
-  // }
+  if (!checkDelta(timestamp)) {
+    res.json({ error: "Invalid timestamp" });
+    return;
+  }
 
   const nickname = body.nickname || "nimetön";
 
@@ -72,6 +73,12 @@ apiRouter.post("/start-game", jsonParser, async (req, res) => {
 });
 
 apiRouter.post("/end-game", jsonParser, async (req, res) => {
+  const ip = await checkIfBanned(req.ip || "");
+  if (ip) {
+    res.json({ error: "Invalid score" });
+    return;
+  }
+
   const body = parseBody(req.body, endGameSchema);
 
   if (!body) {
@@ -129,7 +136,7 @@ apiRouter.post("/end-game", jsonParser, async (req, res) => {
 
   const { error } = await supabase
     .from("games")
-    .update({ ended_at: timestamp, score: score })
+    .update({ ended_at: timestamp, score: score, ip: req.ip })
     .eq("id", gameId);
 
   if (error) {

@@ -44,3 +44,14 @@ export const getDrinkTicket = async (gameId: string) => {
     .single();
   return data;
 };
+
+export const checkIfBanned = async (ip: string) => {
+  const { data, error } = await supabase
+    .from("banned_ips")
+    .select("*")
+    .eq("ip", ip)
+    .limit(1)
+    .single();
+
+  return data;
+};
