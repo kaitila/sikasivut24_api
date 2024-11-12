@@ -14,6 +14,7 @@ const port = process.env.PORT || 8080;
 
 app.set("dailyIssuedTickets", 0);
 app.set("issuedTicketsDay", getCurrentDay());
+app.set("trust proxy", true);
 
 app.use(compression()); // Compress all routes
 const limiter = RateLimit({

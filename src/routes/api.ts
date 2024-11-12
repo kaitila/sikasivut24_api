@@ -73,11 +73,13 @@ apiRouter.post("/start-game", jsonParser, async (req, res) => {
 });
 
 apiRouter.post("/end-game", jsonParser, async (req, res) => {
-  const ip = await checkIfBanned(req.ip || "");
-  if (ip) {
-    res.json({ error: "Invalid score" });
-    return;
-  }
+  const forwarded = req.headers["x-forwarded-for"];
+  const ip = Array.isArray(forwarded)
+    ? forwarded[0]
+    : forwarded?.split(",")[0] || req.ip!;
+  const ipv4 = ip.includes("::ffff:") ? ip.split("::ffff:")[1] : ip;
+
+  const ipRes = await checkIfBanned(ipv4 || "");
 
   const body = parseBody(req.body, endGameSchema);
 
@@ -87,6 +89,14 @@ apiRouter.post("/end-game", jsonParser, async (req, res) => {
   }
 
   const { gameId, score, timestamp, state } = body;
+
+  if (ipRes) {
+    await supabase
+      .from("disallowed_games")
+      .insert({ id: gameId, score, ip: ipv4 });
+    res.json({ error: "Invalid score" });
+    return;
+  }
 
   if (!checkDelta(timestamp)) {
     res.json({ error: "Invalid timestamp" });
@@ -136,7 +146,7 @@ apiRouter.post("/end-game", jsonParser, async (req, res) => {
 
   const { error } = await supabase
     .from("games")
-    .update({ ended_at: timestamp, score: score, ip: req.ip })
+    .update({ ended_at: timestamp, score: score, ip: ipv4 })
     .eq("id", gameId);
 
   if (error) {
