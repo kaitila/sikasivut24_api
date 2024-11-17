@@ -11,7 +11,7 @@ import random from "./random";
 export const checkDelta = (timestamp: number) => {
   //console.log(Date.now() - timestamp);
   const delta = Date.now() - timestamp;
-  return delta < 5000 && delta > 0;
+  return delta < 15000 && delta > -2000;
 };
 
 export const isAtTicketThreshold = (score: number) => {
